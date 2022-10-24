@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Todos.Model;
+using Todos.Services;
 
 namespace Todos.Controllers
 {
@@ -8,17 +9,17 @@ namespace Todos.Controllers
     [ApiController]
     public class TodoController : ControllerBase
     {
-        private readonly ILogger<TodoController> _logger;
+        public JsonFileTodoService TodoService { get; }
 
-        public TodoController(ILogger<TodoController> logger)
+        public TodoController(JsonFileTodoService todoService)
         {
-            _logger = logger;
+            TodoService = todoService;
         }
 
         [HttpGet(Name = "GetTodos")]
         public IEnumerable<Todo> Get()
         {
-            return Enumerable.Empty<Todo>(); // Fix this.
+            return TodoService.GetTodos();
         }
     }
 }
