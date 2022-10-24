@@ -16,14 +16,13 @@ namespace Todos.Services
 
         public IEnumerable<Todo> GetTodos()
         {
-            using (var jsonFileReader = File.OpenText(JsonFileName))
+            using var jsonFileReader = File.OpenText(JsonFileName);
+            Todo[]? todos = JsonSerializer.Deserialize<Todo[]>(jsonFileReader.ReadToEnd(), new JsonSerializerOptions
             {
-                return JsonSerializer.Deserialize<Todo[]>(jsonFileReader.ReadToEnd(),
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-            }
+                PropertyNameCaseInsensitive = true
+            });
+
+            return todos ?? Enumerable.Empty<Todo>();
         }
     }
 }
