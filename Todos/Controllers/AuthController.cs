@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using Todos.Model.Auth;
+using Todos.Services;
 
 namespace Todos.Controllers
 {
@@ -9,18 +10,24 @@ namespace Todos.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public static User user = new();
+        public AuthService AuthService { get; }
+
+        public AuthController(AuthService authService)
+        {
+            AuthService = authService;
+        }
 
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
         {
-            CreatePasswordHash(request.password, out byte[] passwordHash, out byte[] passwordSalt);
-
-            user.Username = request.username;
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-
-            return Ok(user);
+            try{
+                await AuthService.Register(request);
+                return Ok("Success!");
+            } catch (Exception e)
+            {
+                // Fix this excetptiontype.
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost("login")]
