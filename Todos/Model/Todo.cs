@@ -1,16 +1,27 @@
-﻿using System.Text.Json;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
+using Todos.Infrastructure;
+using System.Text.Json;
+using Todos.Models;
 
 namespace Todos.Model
 {
-    public class Todo
+    public class Todo : DocumentBase
     {
-        public string title { get; set; }
-        public string description { get; set; }
+        [BsonElement("title")]
+        public string Title { get; set; }
 
+        [BsonElement("description")]
+        public string Description { get; set; } = null!;
+
+        [BsonElement("done")]
+        public bool Done { get; set; } = false;
+
+        [BsonCollection("Todo")]
         public Todo(String title, String description)
         {
-            this.title = title;
-            this.description = description;
+            Title = title;
+            Description = description;
         }
 
         public override string ToString() => JsonSerializer.Serialize<Todo>(this);
