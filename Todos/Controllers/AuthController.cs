@@ -21,11 +21,11 @@ namespace Todos.Controllers
         public async Task<ActionResult<User>> Register(UserDto request)
         {
             try{
-                await AuthService.Register(request);
-                return Ok("Success!");
+                User user = AuthService.Register(request);
+                return Ok("Success!"); // Return json-formatted user. With jwt?
             } catch (Exception e)
             {
-                // Fix this excetptiontype.
+                // Fix this exceptiontype.
                 return BadRequest(e.Message);
             }
         }
@@ -33,6 +33,16 @@ namespace Todos.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserDto request)
         {
+            try
+            {
+                await AuthService.Login(request);
+                return Ok("Logged in!"); // Return json-formatted user. With jwt?
+            } catch (Exception e)
+            {
+                // Fix this exceptiontype.
+                return BadRequest(e.Message);
+            }
+            /*
             if (user.Username != request.username)
             {
                 return BadRequest("User not found");
@@ -42,27 +52,10 @@ namespace Todos.Controllers
             {
                 return BadRequest("Wrong password");
             }
+            */
                
             return Ok("Success!");
             
-        }
-
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using HMACSHA512 hmac = new();
-
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
-        }
-
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using HMACSHA512 hmac = new(passwordSalt);
-            byte[] computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-
-            return computedHash.SequenceEqual(passwordHash);
         }
     }
 }
