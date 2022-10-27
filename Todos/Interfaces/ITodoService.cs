@@ -2,7 +2,7 @@
 
 namespace Todos.Interfaces
 {
-    public interface ITodoItemsService
+    public interface ITodoService
     {
         public Task<List<Todo>> GetAsync();
 

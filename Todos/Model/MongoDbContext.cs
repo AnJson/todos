@@ -1,7 +1,6 @@
 ﻿using MongoDB.Driver;
 using Todos.Interfaces;
 using Todos.Infrastructure;
-using Todos.Interfaces;
 
 namespace Todos.Models;
 

@@ -6,6 +6,7 @@ using Todos.Models;
 
 namespace Todos.Model
 {
+    [BsonCollection("Todo")]
     public class Todo : DocumentBase
     {
         [BsonElement("title")]
@@ -16,13 +17,6 @@ namespace Todos.Model
 
         [BsonElement("done")]
         public bool Done { get; set; } = false;
-
-        [BsonCollection("Todo")]
-        public Todo(String title, String description)
-        {
-            Title = title;
-            Description = description;
-        }
 
         public override string ToString() => JsonSerializer.Serialize<Todo>(this);
     }
