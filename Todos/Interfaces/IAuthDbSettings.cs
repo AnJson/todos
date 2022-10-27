@@ -1,6 +1,6 @@
 ﻿namespace Todos.Interfaces
 {
-    public interface IMongoDbSettings
+    public interface IAuthDbSettings
     {
         string DatabaseName { get; set; }
         string ConnectionString { get; set; }

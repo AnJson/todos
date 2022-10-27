@@ -1,12 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
+using Todos.Interfaces;
+using Todos.Model;
 using Todos.Model.Auth;
 
 namespace Todos.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
-        public User Register(UserDto request)
+        private readonly IAuthRepository _repository;
+
+        public AuthService(IAuthRepository repository)
+        {
+            _repository = repository;
+        }
+
+        public async Task<List<User>> GetAsync() =>
+            await _repository.GetAsync();
+
+        public async Task<User?> GetAsync(string id) =>
+            await _repository.GetAsync(id);
+
+        public async Task CreateAsync(User newUser) =>
+            await _repository.CreateAsync(newUser);
+
+        public async Task UpdateAsync(string id, User updatedUser) =>
+            await _repository.UpdateAsync(id, updatedUser);
+
+        public async Task RemoveAsync(string id) =>
+            await _repository.DeleteAsync(id);
+    }
+}
+
+/*
+ public User Register(UserDto request)
         {
             CreatePasswordHash(request.password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -52,5 +79,4 @@ namespace Todos.Services
 
             return computedHash.SequenceEqual(passwordHash);
         }
-    }
-}
+ */
