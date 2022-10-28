@@ -1,4 +1,5 @@
-﻿using Todos.Interfaces;
+﻿using Todos.Contracts.Todo;
+using Todos.Interfaces;
 using Todos.Model;
 
 namespace Todos.Services
@@ -12,14 +13,14 @@ namespace Todos.Services
             _repository = repository;
         }
 
-        public async Task<List<Todo>> GetAsync() =>
+        public async Task<List<TodoResponse>> GetAsync() =>
             await _repository.GetAsync();
 
-        public async Task<Todo?> GetAsync(string id) =>
+        public async Task<TodoResponse?> GetAsync(string id) =>
             await _repository.GetAsync(id);
 
-        public async Task CreateAsync(Todo newTodoItem) =>
-            await _repository.CreateAsync(newTodoItem);
+        public async Task CreateAsync(CreateTodoRequest request) =>
+            await _repository.CreateAsync(request);
 
         public async Task UpdateAsync(string id, Todo updatedTodoItem) =>
             await _repository.UpdateAsync(id, updatedTodoItem);

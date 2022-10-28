@@ -10,14 +10,22 @@ namespace Todos.Model
     public class Todo : DocumentBase
     {
         [BsonElement("title")]
-        public string Title { get; set; }
+        public string Title { get;}
 
         [BsonElement("description")]
-        public string Description { get; set; } = null!;
+        public string Description { get;} = null!;
 
         [BsonElement("done")]
-        public bool Done { get; set; } = false;
+        public bool Done { get;} = false;
 
         public override string ToString() => JsonSerializer.Serialize<Todo>(this);
+
+        public Todo(string title, string description, bool done)
+        {
+            // TODO: Validate?
+            Title = title;
+            Description = description;
+            Done = done;
+        }
     }
 }

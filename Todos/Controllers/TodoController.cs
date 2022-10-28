@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Todos.Contracts.Todo;
 using Todos.Interfaces;
 using Todos.Model;
 using Todos.Services;
@@ -16,28 +17,48 @@ namespace Todos.Controllers
             _todoItemsService = todoItemsService;
 
         [HttpGet]
-        public async Task<List<Todo>> Get() =>
+        public async Task<List<TodoResponse>> Get() =>
             await _todoItemsService.GetAsync();
 
         [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<Todo>> Get(string id)
+        public async Task<ActionResult<TodoResponse>> Get(string id)
         {
-            var todoItem = await _todoItemsService.GetAsync(id);
+            var todo = await _todoItemsService.GetAsync(id);
 
-            if (todoItem is null)
+            if (todo is null)
             {
                 return NotFound();
             }
 
-            return todoItem;
+            TodoResponse response = new (
+                Id: todo.Id,
+                Title: todo.Title,
+                Description: todo.Description,
+                Done: todo.Done
+                );
+
+            return response;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Todo newTodoItem)
+        public async Task<IActionResult> Post(CreateTodoRequest request)
         {
-            await _todoItemsService.CreateAsync(newTodoItem);
+            Todo todo = new (
+                title: request.Title,
+                description: request.Description,
+                done: request.Done
+                );
 
-            return CreatedAtAction(nameof(Get), new { id = newTodoItem.Id }, newTodoItem);
+            await _todoItemsService.CreateAsync(todo);
+
+            TodoResponse response = new (
+                Id: todo.Id,
+                Title: todo.Title,
+                Description: todo.Description,
+                Done: todo.Done
+                );
+
+            return CreatedAtAction(nameof(Get), new { id = todo.Id }, value: response);
         }
 
         [HttpPut("{id:length(24)}")]

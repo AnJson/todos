@@ -1,14 +1,15 @@
-﻿using Todos.Model;
+﻿using Todos.Contracts.Todo;
+using Todos.Model;
 
 namespace Todos.Interfaces
 {
     public interface ITodoService
     {
-        public Task<List<Todo>> GetAsync();
+        public Task<List<TodoResponse>> GetAsync();
 
-        public Task<Todo?> GetAsync(string id);
+        public Task<TodoResponse?> GetAsync(string id);
 
-        public Task CreateAsync(Todo newTodoItem);
+        public Task CreateAsync(CreateTodoRequest newTodoItem);
 
         public Task UpdateAsync(string id, Todo updatedTodoItem);
 
