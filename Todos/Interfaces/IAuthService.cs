@@ -5,13 +5,13 @@ namespace Todos.Interfaces
 {
     public interface IAuthService
     {
-        public Task<List<User>> GetAsync();
+        public Task<List<Auth>> GetAsync();
 
-        public Task<User?> GetAsync(string id);
+        public Task<Auth?> GetAsync(string id);
 
-        public Task CreateAsync(User newUser);
+        public Task CreateAsync(Auth newUser);
 
-        public Task UpdateAsync(string id, User updatedUser);
+        public Task UpdateAsync(string id, Auth updatedUser);
 
         public Task RemoveAsync(string id);
     }

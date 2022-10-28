@@ -15,16 +15,16 @@ namespace Todos.Services
             _repository = repository;
         }
 
-        public async Task<List<User>> GetAsync() =>
+        public async Task<List<Auth>> GetAsync() =>
             await _repository.GetAsync();
 
-        public async Task<User?> GetAsync(string id) =>
+        public async Task<Auth?> GetAsync(string id) =>
             await _repository.GetAsync(id);
 
-        public async Task CreateAsync(User newUser) =>
+        public async Task CreateAsync(Auth newUser) =>
             await _repository.CreateAsync(newUser);
 
-        public async Task UpdateAsync(string id, User updatedUser) =>
+        public async Task UpdateAsync(string id, Auth updatedUser) =>
             await _repository.UpdateAsync(id, updatedUser);
 
         public async Task RemoveAsync(string id) =>

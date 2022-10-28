@@ -2,7 +2,7 @@
 
 namespace Todos.Model.Auth
 {
-    public class User : DocumentBase
+    public class Auth : DocumentBase
     {
         public string Username { get; set; } = string.Empty;
         public byte[] PasswordHash { get; set; }

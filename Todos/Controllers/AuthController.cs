@@ -18,21 +18,25 @@ namespace Todos.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserDto request)
+        public async Task<ActionResult<Auth>> Register(AuthDto request)
         {
+            /*
             try{
-                User user = AuthService.Register(request);
+                Auth user = AuthService.Register(request);
                 return Ok("Success!"); // Return json-formatted user. With jwt?
             } catch (Exception e)
             {
                 // Fix this exceptiontype.
                 return BadRequest(e.Message);
             }
+            */
+            return Ok("Success!");
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDto request)
+        public async Task<ActionResult<string>> Login(AuthDto request)
         {
+            /*
             try
             {
                 await AuthService.Login(request);
@@ -42,6 +46,8 @@ namespace Todos.Controllers
                 // Fix this exceptiontype.
                 return BadRequest(e.Message);
             }
+            */
+
             /*
             if (user.Username != request.username)
             {
