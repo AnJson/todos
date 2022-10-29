@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using Todos.Interfaces;
 
 namespace Todos.Repositories
@@ -20,6 +21,12 @@ namespace Todos.Repositories
 
         public virtual async Task<TDocument?> GetAsync(string id) =>
             await _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+
+        public virtual async Task<List<TDocument?>> GetAsync(TDocument doc)
+        {
+            FilterDefinition<BsonDocument> filter = new BsonDocument(doc.ToBsonDocument());
+            return await _collection.Find(filter).ToListAsync(); // TODO: FIlter Definition
+        }
 
         public virtual async Task CreateAsync(TDocument document) =>
             await _collection.InsertOneAsync(document);
