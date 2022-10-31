@@ -18,6 +18,9 @@ namespace Todos.Model
         [BsonElement("done")]
         public bool Done { get; set; } = false;
 
+        [BsonElement("updated")]
+        public DateTime UpdatedAt { get; set; }
+
         public override string ToString() => JsonSerializer.Serialize<Todo>(this);
     }
 }
