@@ -4,6 +4,7 @@ using Todos.Repositories;
 using Todos.Services;
 using Microsoft.Extensions.Options;
 using Todos.Model.Auth;
+using Todos.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,11 +28,15 @@ builder.Services
     .AddScoped<IAuthRepository, AuthRepository>()
     .AddScoped<IAuthService, AuthService>();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<JsonFileTodoService>();
+// AUTOMAPPER.
+builder.Services.AddAutoMapper(typeof(MapperConfig));
+
+{
+    builder.Services.AddControllers();
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+}
 
 
 var app = builder.Build();
