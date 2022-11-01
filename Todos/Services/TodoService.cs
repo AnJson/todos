@@ -18,7 +18,7 @@ namespace Todos.Services
         public async Task<Todo?> GetAsync(string id) =>
             await _repository.GetAsync(id);
 
-        public async Task<List<Todo>> GetAsync(Todo? todo) =>
+        public async Task<List<Todo?>> GetAsync(Todo todo) =>
             await _repository.GetAsync(todo);
 
         public async Task CreateAsync(Todo newTodoItem) =>

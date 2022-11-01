@@ -24,8 +24,10 @@ namespace Todos.Repositories
 
         public virtual async Task<List<TDocument?>> GetAsync(TDocument doc)
         {
-            FilterDefinition<BsonDocument> filter = new BsonDocument(doc.ToBsonDocument());
-            return await _collection.Find("${doc.toString()}").ToListAsync(); // TODO: FIlter Definition
+            // TODO: FIlter Definition
+            // FilterDefinition<BsonDocument> filter = new BsonDocument(doc.ToBsonDocument());
+            // return await _collection.Find("${doc.toString()}").ToListAsync();
+            return await _collection.Find(_ => true).ToListAsync();
         }
 
         public virtual async Task CreateAsync(TDocument document) =>

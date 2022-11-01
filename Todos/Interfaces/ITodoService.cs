@@ -8,7 +8,7 @@ namespace Todos.Interfaces
 
         public Task<Todo?> GetAsync(string id);
 
-        public Task<List<Todo>> GetAsync(Todo? todo);
+        public Task<List<Todo?>> GetAsync(Todo todo);
 
         public Task CreateAsync(Todo newTodoItem);
 

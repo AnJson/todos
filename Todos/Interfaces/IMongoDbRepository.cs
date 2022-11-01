@@ -6,7 +6,7 @@ namespace Todos.Interfaces
     {
         Task<List<TDocument>> GetAsync();
         Task<TDocument?> GetAsync(string id);
-        Task<List<TDocument?>> GetAsync(Todo todo);
+        Task<List<TDocument?>> GetAsync(TDocument todo);
         Task CreateAsync(TDocument document);
         Task UpdateAsync(string id, TDocument document);
         Task DeleteAsync(string id);

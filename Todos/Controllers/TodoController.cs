@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todos.Interfaces;
 using Todos.Model;
+using Todos.Model.DTO.Todo;
 using Todos.Services;
 
 namespace Todos.Controllers
@@ -16,11 +18,12 @@ namespace Todos.Controllers
             _todoService = todoService;
 
         [HttpGet]
-        public async Task<ActionResult<List<Todo>>> Get()
+        public async Task<ActionResult<List<TodoResponse>>> Get(IMapper mapper)
         {
             try
             {
-                return await _todoService.GetAsync();
+                List<Todo> todos = await _todoService.GetAsync();
+                return mapper.Map<List<TodoResponse>>(todos);
             }catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retreiving data from the database.");
@@ -29,7 +32,7 @@ namespace Todos.Controllers
         }
 
         [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<Todo>> Get(string id)
+        public async Task<ActionResult<TodoResponse?>> Get(string id, IMapper mapper)
         {
             var todoItem = await _todoService.GetAsync(id);
 
@@ -38,14 +41,17 @@ namespace Todos.Controllers
                 return NotFound();
             }
 
-            return todoItem;
+            return mapper.Map<TodoResponse?>(todoItem);
         }
 
-        public async Task<ActionResult<List<Todo>>> Get(Todo? todo)
+        public async Task<ActionResult<List<TodoResponse?>>> Get(Todo todo, IMapper mapper)
         {
             try
             {
-                return await _todoService.GetAsync(todo);
+                // TODO: FIlter here???
+                List<Todo?> todos = await _todoService.GetAsync(todo);
+                return mapper.Map<List<TodoResponse?>>(todos);
+
 
                 /*
                  * Example of checking for duplicates in DB.
@@ -66,10 +72,10 @@ namespace Todos.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Todo newTodoItem)
+        public async Task<IActionResult> Post(TodoCreate newTodoItem, IMapper mapper)
         {
-            await _todoService.CreateAsync(newTodoItem);
-
+            await _todoService.CreateAsync(mapper.Map<Todo>(newTodoItem));
+            // TODO: FIX THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             return CreatedAtAction(nameof(Get), new { id = newTodoItem.Id }, newTodoItem);
         }
 
