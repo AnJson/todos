@@ -1,5 +1,7 @@
-﻿using Todos.Interfaces;
+﻿using AutoMapper;
+using Todos.Interfaces;
 using Todos.Model;
+using Todos.Model.DTO.Todo;
 
 namespace Todos.Services
 {
@@ -12,8 +14,11 @@ namespace Todos.Services
             _repository = repository;
         }
 
-        public async Task<List<Todo>> GetAsync() =>
-            await _repository.GetAsync();
+        public async Task<List<TodoResponse>> GetAsync(IMapper mapper)
+        {
+            List<Todo> todos = await _repository.GetAsync();
+            return mapper.Map<List<TodoResponse>>(todos);
+        }
 
         public async Task<Todo?> GetAsync(string id) =>
             await _repository.GetAsync(id);
