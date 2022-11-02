@@ -13,17 +13,21 @@ namespace Todos.Controllers
     public class TodoController : ControllerBase
     {
         private readonly ITodoService _todoService;
+        private readonly IMapper _mapper;
 
-        public TodoController(ITodoService todoService) =>
+        public TodoController(ITodoService todoService, IMapper mapper) 
+        { 
             _todoService = todoService;
+            _mapper = mapper;
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<TodoResponse>>> Get()
         {
             try
             {
-                List<TodoResponse> todos = await _todoService.GetAsync();
-                return todos;
+                List<Todo> todos = await _todoService.GetAsync();
+                return _mapper.Map<List<TodoResponse>>(todos);
             }catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retreiving data from the database.");
@@ -32,11 +36,10 @@ namespace Todos.Controllers
         }
 
         [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<TodoResponse?>> Get([FromBody]string id, IMapper mapper)
+        public async Task<ActionResult<TodoResponse?>> Get(string id)
         {
             try
             {
-                // TODO: REFACTOR TO MAP IN SERVICE!!!
                 var todoItem = await _todoService.GetAsync(id);
 
                 if (todoItem is null)
@@ -44,48 +47,30 @@ namespace Todos.Controllers
                     return NotFound();
                 }
 
-                return mapper.Map<TodoResponse?>(todoItem);
+                return _mapper.Map<TodoResponse>(todoItem);
             } catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retreiving data from the database.");
             }
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<List<TodoResponse?>>> Get(Todo todo, IMapper mapper)
-        //{
-        //    try
-        //    {
-        //        // TODO: FIlter here???
-        //        List<Todo?> todos = await _todoService.GetAsync(todo);
-        //        return mapper.Map<List<TodoResponse?>>(todos);
-        //
-        //
-        //        /*
-        //         * Example of checking for duplicates in DB.
-        //         * 
-        //         Todo todo = _todoService.GetTodoByTitle(todo.Title);
-        //         if (todo == null) {
-        //             ModelState.AddModelError("title", "Todo-title already in use.");
-        //             return BadRequest(ModelState);
-        //         }
-        //         */
-        //
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, "Error retreiving data from the database.");
-        //    }
-        //}
-
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]TodoCreate newTodoItem, IMapper mapper)
+        public async Task<IActionResult> Post(TodoCreate newTodoItem)
         {
             try
             {
-                Todo todo = mapper.Map<Todo>(newTodoItem);
-                await _todoService.CreateAsync(todo);
-                return CreatedAtAction(nameof(Get), new { id = todo.Id }, mapper.Map<TodoResponse>(todo));
+                /*
+                 * Example of checking for duplicates in DB.
+                 * 
+                 Todo todo = _todoService.GetTodoByTitle(todo.Title);
+                 if (todo == null) {
+                     ModelState.AddModelError("title", "Todo-title already in use.");
+                     return BadRequest(ModelState);
+                 }
+                 */
+                Todo createdTodo = _mapper.Map<Todo>(newTodoItem);
+                await _todoService.CreateAsync(createdTodo);
+                return CreatedAtAction(nameof(Get), new { id = createdTodo.Id }, createdTodo);
             } catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error posting data to the database.");
@@ -93,7 +78,7 @@ namespace Todos.Controllers
         }
 
         [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> Update([FromBody]string id, Todo updatedTodoItem)
+        public async Task<IActionResult> Update(string id, Todo updatedTodoItem)
         {
             try
             {
@@ -116,7 +101,7 @@ namespace Todos.Controllers
         }
 
         [HttpDelete("{id:length(24)}")]
-        public async Task<IActionResult> Delete([FromBody]string id)
+        public async Task<IActionResult> Delete(string id)
         {
             try
             {

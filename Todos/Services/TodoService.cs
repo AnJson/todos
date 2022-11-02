@@ -14,17 +14,12 @@ namespace Todos.Services
             _repository = repository;
         }
 
-        public async Task<List<TodoResponse>> GetAsync(IMapper mapper)
-        {
-            List<Todo> todos = await _repository.GetAsync();
-            return mapper.Map<List<TodoResponse>>(todos);
-        }
+        public async Task<List<Todo>> GetAsync() =>
+            await _repository.GetAsync();
+ 
 
         public async Task<Todo?> GetAsync(string id) =>
             await _repository.GetAsync(id);
-
-        public async Task<List<Todo?>> GetAsync(Todo todo) =>
-            await _repository.GetAsync(todo);
 
         public async Task CreateAsync(Todo newTodoItem) =>
             await _repository.CreateAsync(newTodoItem);

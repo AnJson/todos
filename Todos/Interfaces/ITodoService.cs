@@ -1,17 +1,16 @@
-﻿using Todos.Model;
+﻿using AutoMapper;
+using Todos.Model;
 using Todos.Model.DTO.Todo;
 
 namespace Todos.Interfaces
 {
     public interface ITodoService
     {
-        public Task<List<TodoResponse>> GetAsync();
+        public Task<List<Todo>> GetAsync();
 
-        public Task<TodoResponse?> GetAsync(string id);
+        public Task<Todo?> GetAsync(string id);
 
-        public Task<List<TodoResponse?>> GetAsync(Todo todo);
-
-        public Task CreateAsync(TodoCreate newTodoItem);
+        public Task CreateAsync(Todo newTodoItem);
 
         public Task UpdateAsync(string id, Todo updatedTodoItem);
 

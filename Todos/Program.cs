@@ -5,6 +5,7 @@ using Todos.Services;
 using Microsoft.Extensions.Options;
 using Todos.Model.Auth;
 using Todos.Config;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
